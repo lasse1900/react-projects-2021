@@ -5,7 +5,24 @@ import { v1 as uuid } from 'uuid';
 // reducer function
 
 const reducer = (state, action) => {
-
+  console.log(state)
+  if (action.type === 'ADD_ITEM') {
+    const newPeople = [...state.people, action.payload]
+    return {
+      ...state,
+      people: newPeople,
+      isModalOpen: true,
+      modalContent: 'item added'
+    }
+  };
+  if (action.type === 'NO_VALUE') {
+    return {
+      ...state,
+      isModalOpen: true,
+      modalContent: 'please enter a value'
+    }
+  }
+  throw new Error('no matching action type')
 }
 
 const defaultState = {
@@ -21,14 +38,16 @@ const Index = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (name) {
-
+      const newItem = { id: uuid(), name }
+      dispatch({ type: 'ADD_ITEM', payload: newItem })
+      setName('')
     }
     else {
-    
+      dispatch({ type: 'NO_VALUE' })
     }
   }
   return <>
-    {state.isModalOpen && <Modal modalContent={state.modalContent}/>}
+    {state.isModalOpen && <Modal modalContent={state.modalContent} />}
     <form onSubmit={handleSubmit} className="form">
       <div>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
