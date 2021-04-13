@@ -12,17 +12,20 @@ const Index = () => {
   const [count, setCount] = useState(0)
 
   return (
-    <>
+    <div>
       <h1>Count : {count}</h1>
       <button className='btn' onClick={() => setCount(count + 1)}>
         click me
       </button>
       <BigList products={products} />
-    </>
+    </div>
   )
 }
 
-const BigList = ({ products }) => {
+const BigList = React.memo(({ products }) => {
+  useEffect(() => {
+    console.log('big list called')
+  })
   return (
     <section className='products'>
       {products.map((product) => {
@@ -30,9 +33,12 @@ const BigList = ({ products }) => {
       })}
     </section>
   )
-}
+});
 
 const SingleProduct = ({ fields }) => {
+  useEffect(() => {
+    console.count('single item called')
+  })
   let { name, price } = fields
   price = price / 100
   const image = fields.image[0].url
